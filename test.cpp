@@ -1,25 +1,29 @@
-#include<bits/stdc++.h>
+#include "Boom.h"
 using namespace std;
-char str[1000];
-map<pair<pair<int,int> ,int> ,int> a;
-vector<array<int,4> > b;
+int cnt = 0;
+int dfs(int d, int kill, const bitset<ANS_NUM> &cur, bitset<R * C> &vis) {
+  if (kill == 3) {
+    return cur.count();
+  }
+  if (d == 14 || cur.count() == 0) {
+    return 0;
+  }
+  int res = 0;
+  int x = solve(cur, vis);
+  vis[x] = 1;
+  for (int i = 0; i < 3; i++) {
+    res += dfs(d + 1, kill + (i == 2), eigen[x][i] & cur, vis);
+  }
+  vis[x] = 0;
+  return res;
+}
 int main(){
-  freopen("AnswerList.txt","r",stdin);
-  int cnt=0;
-  while(scanf("%s",str)!=EOF){
-    int x=0,y=0,z=0;
-    while(str[x]!='2') ++x;
-    y=x+1;
-    while(str[y]!='2') ++y;
-    z=y+1;
-    while(str[z]!='2') ++z;
-    a[make_pair(make_pair(x,y),z)]++;
+  get_choice_vector();
+  for (K = 0.1; K <= 2; K += 0.1) {
+    bitset<ANS_NUM> cur;
+    cur.set();
+    bitset<R * C> vis;
+    printf("K = %.1lf 成功率:%d/%d\n", K, dfs(0, 0, cur, vis), ANS_NUM);
   }
-  for(auto x:a){
-    b.push_back({-x.second,x.first.first.first,x.first.first.second,x.first.second});
-  }
-  sort(b.begin(),b.end());
-  for(auto x:b){
-    printf("%d %d %d %d\n", -x[0], x[1], x[2], x[3]);
-  }
+  return 0;
 }
