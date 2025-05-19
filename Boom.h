@@ -1,4 +1,5 @@
 #include<bits/stdc++.h>
+#include "bitsetand.h"
 #pragma once
 using namespace std;
 const int PLANE_NUM = 3;
@@ -67,7 +68,11 @@ int solve(const bitset<ANS_NUM> &cur, const bitset<R*C> &ban){
   double best_w = -1e9;
   for(int i=0;i<R*C;++i){
     if(ban[i]) continue;
-    double w = get_weight(eigen[i][0]&cur,eigen[i][1]&cur,eigen[i][2]&cur);
+    std::bitset<66816> bs1,bs2,bs3;
+    bitset_and(bs1,eigen[i][0],cur);
+    bitset_and(bs2,eigen[i][1],cur);
+    bitset_and(bs3,eigen[i][2],cur);
+    double w = get_weight(bs1,bs2,bs3);
     // cout<<i<<" "<<w<<endl;
     if(best_i==-1||w>best_w){
       best_i = i;
