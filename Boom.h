@@ -51,8 +51,7 @@ void get_choice_vector(){
   for(int i=0;i<ANS_NUM;++i) count_ans(i,ans_list[i]);
 }
 
-double K = 0.79;
-double get_weight(const bitset<ANS_NUM> &v0,const bitset<ANS_NUM> &v1,const bitset<ANS_NUM> &v2){
+double get_weight(const bitset<ANS_NUM> &v0,const bitset<ANS_NUM> &v1,const bitset<ANS_NUM> &v2,double K){
   double res = 0;
   int x0 = v0.count(), x1 = v1.count(), x2 = v2.count();
   // cout<<x0<<" "<<x1<<" "<<x2<<endl;
@@ -63,7 +62,7 @@ double get_weight(const bitset<ANS_NUM> &v0,const bitset<ANS_NUM> &v1,const bits
   return -res+1.0 * x2/(x0+x1+x2)*K;
 }
 
-int solve(const bitset<ANS_NUM> &cur, const bitset<R*C> &ban){
+int solve(const bitset<ANS_NUM> &cur, const bitset<R*C> &ban, double K){
   int best_i = -1;
   double best_w = -1e9;
   for(int i=0;i<R*C;++i){
@@ -72,7 +71,7 @@ int solve(const bitset<ANS_NUM> &cur, const bitset<R*C> &ban){
     bitset_and(bs1,eigen[i][0],cur);
     bitset_and(bs2,eigen[i][1],cur);
     bitset_and(bs3,eigen[i][2],cur);
-    double w = get_weight(bs1,bs2,bs3);
+    double w = get_weight(bs1,bs2,bs3,K);
     // cout<<i<<" "<<w<<endl;
     if(best_i==-1||w>best_w){
       best_i = i;
