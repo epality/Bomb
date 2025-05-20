@@ -1,7 +1,7 @@
 #include "Boom.h"
 using namespace std;
 int cnt = 0;
-int dfs(int d, int kill, const bitset<ANS_NUM> &cur, bitset<R * C> &vis, double K, double dK) {
+int dfs(int d, int kill, const bitset<ANS_NUM> &cur, bitset<R * C> &vis, double K=0.79, double dK=0) {
   if (kill == 3) {
     return cur.count();
   }
@@ -21,13 +21,18 @@ int dfs(int d, int kill, const bitset<ANS_NUM> &cur, bitset<R * C> &vis, double 
 }
 int main(){
   get_choice_vector();
-  #pragma omp parallel
-  for (double K0 = 0.70; K0 <= 0.80; K0 += 0.01) {
-    for (double dK = 0.00; dK <= 0.02; dK += 0.002) {
-      bitset<ANS_NUM> cur;
-      cur.set();
-      bitset<R * C> vis;
-      printf("K0 = %.4lf, dK = %.4lf, Acc=%d/%d\n", K0, dK, dfs(0, 0, cur, vis, K0, dK), ANS_NUM);
+  #pragma omp parallel for
+  for (int step1 = 0; step1 < R*C; ++step1) {
+    bitset<ANS_NUM> cur,tmp;
+    cur.set();
+    bitset<R * C> vis;
+    vis[step1]=1;
+    int sum = 0;
+    for(int status=0;status<3;++status) bitset_and(tmp,eigen[step1][status],cur), sum+=dfs(1, status==2, tmp, vis);
+    #pragma omp critical
+    {
+      printf("step1=%2d, Acc=%d/%d\n", step1, sum, ANS_NUM);
+      fflush(stdout);
     }
   }
   return 0;

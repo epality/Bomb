@@ -62,7 +62,7 @@ double get_weight(const bitset<ANS_NUM> &v0,const bitset<ANS_NUM> &v1,const bits
   return -res+1.0 * x2/(x0+x1+x2)*K;
 }
 
-int solve(const bitset<ANS_NUM> &cur, const bitset<R*C> &ban, double K){
+int solve(const bitset<ANS_NUM> &cur, const bitset<R*C> &ban, double K=0.79){
   int best_i = -1;
   double best_w = -1e9;
   for(int i=0;i<R*C;++i){
