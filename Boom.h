@@ -68,7 +68,7 @@ int solve(const bitset<ANS_NUM> &cur, const bitset<R*C> &ban){
   double best_w = -1e9;
   for(int i=0;i<R*C;++i){
     if(ban[i]) continue;
-    std::bitset<66816> bs1,bs2,bs3;
+    bitset<ANS_NUM> bs1,bs2,bs3;
     bitset_and(bs1,eigen[i][0],cur);
     bitset_and(bs2,eigen[i][1],cur);
     bitset_and(bs3,eigen[i][2],cur);

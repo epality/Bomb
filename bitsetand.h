@@ -6,10 +6,12 @@
 #include <immintrin.h>
 #include <bitset>
 
-void bitset_and(std::bitset<66816> &dst, const std::bitset<66816> &src1, const std::bitset<66816> &src2)
+template<unsigned long long T>
+void bitset_and(std::bitset<T> &dst, const std::bitset<T> &src1, const std::bitset<T> &src2)
 {
+    static_assert(T % 256 == 0, "T must be a multiple of 256");
     const int avx2_elements = 4;
-    const int num_blocks = 66816 / 64 / avx2_elements;
+    const int num_blocks = T / 64 / avx2_elements;
 
     for (int block = 0; block < num_blocks; ++block)
     {
