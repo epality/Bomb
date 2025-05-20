@@ -3,8 +3,8 @@ using namespace std;
 
 static const double K0 = 0.79;
 static const double dK = 0;
-static int sum_status = 1;
-static map<int,int> best_c = {{1,32}};
+static int sum_status = 0;
+static map<int,int> best_c = {{0,32}};
 int main(){
   get_choice_vector();
   bitset<ANS_NUM> cur;
@@ -20,7 +20,7 @@ int main(){
     vis[x]=true;
     cout<<(char)((x%10)+'a')<<x/10+1<<endl;
     cin>>y;
-    sum_status = sum_status*3+y;
+    sum_status |= (y+1)<<(i<<1);
     if(y==2) ++kill;
     if(kill==3) break;
     cur &= eigen[x][y];
