@@ -6,7 +6,7 @@
 #include <immintrin.h>
 #include <bitset>
 
-template<unsigned long long T>
+template<size_t T>
 void bitset_and(std::bitset<T> &dst, const std::bitset<T> &src1, const std::bitset<T> &src2)
 {
     static_assert(T % 256 == 0, "T must be a multiple of 256");
