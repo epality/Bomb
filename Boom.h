@@ -51,14 +51,14 @@ void get_choice_vector(){
   for(int i=0;i<ANS_NUM;++i) count_ans(i,ans_list[i]);
 }
 
-short best_c[1 << 26] = {32};
+char best_c[1 << 22] = {32};
 void load_strategy() {
   freopen("strategy.txt","r",stdin);
   int stat, chooce;
   while(scanf("%d%d", &stat, &chooce)!=EOF){
     best_c[stat] = chooce;
   }
-  cout << stat << " " << chooce << endl;
+  // cout << stat << " " << chooce << endl;
   fclose(stdin);
   freopen("CON","r",stdin);
 }

@@ -19,18 +19,38 @@ int dfs(int d, int kill, const bitset<ANS_NUM> &cur, bitset<R * C> &vis, double 
   vis[x] = 0;
   return res;
 }
-static int sum_status = 0;
-int cur_step = 5;
-int num_stat = (1<<(2*(cur_step-1)));
-int best_choice[1 << 26], best_acc[1 << 26], tot[1 << 26];
-double best_weight[1 << 26];
-bool invalid(int x) {
-  for (int step = 1; step < cur_step; ++step)
-    if(((x>>(2*step-2))&3)==0)
-      return true;
-  return false;
+int dfs2(int d, int kill, const bitset<ANS_NUM> &cur, bitset<R * C> &vis, int stat = 0, double K=0.79, double dK=0) {
+  if (kill == 3) {
+    return cur.count();
+  }
+  if (d == 14 || cur.count() == 0) {
+    return 0;
+  }
+  int res = 0;
+  int x = best_c[stat] ? best_c[stat] : solve(cur, vis, K);
+  vis[x] = 1;
+  for (int i = 0; i < 3; i++) {
+    bitset<ANS_NUM> tmp;
+    bitset_and(tmp, eigen[x][i],  cur);
+    res += dfs2(d + 1, kill + (i == 2), tmp, vis, stat | i + 1 << (d << 1), K+dK, dK);
+  }
+  vis[x] = 0;
+  return res;
 }
-void work() {
+static int sum_status = 0;
+const int MAX_STEP = 12, MAX_STATUS = 1 << (MAX_STEP - 1 << 1);
+int best_choice[MAX_STATUS], best_acc[MAX_STATUS], tot[MAX_STATUS];
+double best_weight[MAX_STATUS];
+void work(int cur_step) {
+  int num_stat = (1<<(2*(cur_step-1)));
+
+  auto invalid = [&](int x) {
+    for (int step = 1; step < cur_step; ++step)
+      if(((x>>(2*step-2))&3)==0)
+        return true;
+    return false;
+  };
+
   #pragma omp parallel for
   for (int x = 0; x < R*C; ++x) {
     for (int stat = 0; stat < num_stat; stat ++) {
@@ -91,15 +111,19 @@ void work() {
 int main(){
   get_choice_vector();
   load_strategy();
-  for (cur_step = 2; cur_step <= 12; cur_step += 1) {
-    num_stat = (1<<(2*(cur_step-1)));
-    work();
-  }
-  freopen("strategy.txt", "w", stdout);
-  for (int i = 0; i < num_stat; i++) {
-    if (invalid(i)) continue;
-    printf("%d %d\n", i, num_stat);
-  }
-  fclose(stdout);
+  //generate strategy
+  // for (int i = 2; i <= MAX_STEP; i += 1) {
+  //   work(i);
+  // }
+  // freopen("strategy.txt", "w", stdout);
+  // for (int i = 0; i < MAX_STATUS; i++) {
+  //   if (!best_c[i]) continue;
+  //   printf("%d %d\n", i, (int)best_c[i]);
+  // }
+  // fclose(stdout);
+  bitset<ANS_NUM> cur;
+  bitset<R * C> vis;
+  cur.set();
+  printf("ACC=%d/%d\n", dfs2(0, 0, cur, vis), ANS_NUM);
   return 0;
 }
