@@ -1,5 +1,5 @@
 #include<bits/stdc++.h>
-#include "bitsetand.h"
+#include "VectorizedBitset.h"
 #pragma once
 using namespace std;
 const int PLANE_NUM = 3;
@@ -53,7 +53,7 @@ void get_choice_vector(){
 
 double get_weight(const bitset<ANS_NUM> &v0,const bitset<ANS_NUM> &v1,const bitset<ANS_NUM> &v2,double K){
   double res = 0;
-  int x0 = v0.count(), x1 = v1.count(), x2 = v2.count();
+  int x0 = bitset_count(v0), x1 = bitset_count(v1), x2 = bitset_count(v2);
   // cout<<x0<<" "<<x1<<" "<<x2<<endl;
   if(x0) res += x0*log(x0);
   if(x1) res += x1*log(x1);
