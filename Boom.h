@@ -51,10 +51,13 @@ void get_choice_vector(){
   for(int i=0;i<ANS_NUM;++i) count_ans(i,ans_list[i]);
 }
 
-char best_c[1 << 22] = {32};
+const int BEST_CAP = 1 << 22;
+
+signed char best_c[BEST_CAP] = {32};
 void load_strategy() {
   freopen("strategy.txt","r",stdin);
   int stat, chooce;
+  memset(best_c, -1, sizeof(best_c));
   while(scanf("%d%d", &stat, &chooce)!=EOF){
     best_c[stat] = chooce;
   }

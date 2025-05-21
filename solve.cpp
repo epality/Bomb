@@ -6,6 +6,7 @@ static const double dK = 0;
 static int sum_status = 0;
 int main(){
   get_choice_vector();
+  load_strategy();
   bitset<ANS_NUM> cur;
   bitset<R*C> vis;
   cur.set();
@@ -14,7 +15,7 @@ int main(){
   for(int i=0;i<14;++i){
     // puts("!!!!!!!!");
     int x , y;
-    if(best_c[sum_status]) x = best_c[sum_status];
+    if(sum_status<BEST_CAP&&best_c[sum_status]!=-1) x = best_c[sum_status];
     else x = solve(cur,vis,K);
     vis[x]=true;
     cout<<(char)((x%10)+'a')<<x/10+1<<endl;
