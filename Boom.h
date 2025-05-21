@@ -62,16 +62,23 @@ double get_weight(const bitset<ANS_NUM> &v0,const bitset<ANS_NUM> &v1,const bits
   return -res+1.0 * x2/(x0+x1+x2)*K;
 }
 
+double get_weight(const bitset<ANS_NUM> &v0,const bitset<ANS_NUM> &v1,const bitset<ANS_NUM> &v2,const bitset<ANS_NUM> &bias,double K){
+  double res = 0;
+  int x0 = bitset_and_count(v0,bias), x1 = bitset_and_count(v1,bias), x2 = bitset_and_count(v2,bias);
+  // cout<<x0<<" "<<x1<<" "<<x2<<endl;
+  if(x0) res += x0*log(x0);
+  if(x1) res += x1*log(x1);
+  if(x2) res += x2*log(x2);
+  res /= x0+x1+x2;
+  return -res+1.0 * x2/(x0+x1+x2)*K;
+}
+
 int solve(const bitset<ANS_NUM> &cur, const bitset<R*C> &ban, double K=0.79){
   int best_i = -1;
   double best_w = -1e9;
   for(int i=0;i<R*C;++i){
     if(ban[i]) continue;
-    bitset<ANS_NUM> bs1,bs2,bs3;
-    bitset_and(bs1,eigen[i][0],cur);
-    bitset_and(bs2,eigen[i][1],cur);
-    bitset_and(bs3,eigen[i][2],cur);
-    double w = get_weight(bs1,bs2,bs3,K);
+    double w = get_weight(eigen[i][0],eigen[i][1],eigen[i][2],cur,K);
     // cout<<i<<" "<<w<<endl;
     if(best_i==-1||w>best_w){
       best_i = i;
