@@ -51,7 +51,19 @@ void get_choice_vector(){
   for(int i=0;i<ANS_NUM;++i) count_ans(i,ans_list[i]);
 }
 
-double get_weight(const bitset<ANS_NUM> &v0,const bitset<ANS_NUM> &v1,const bitset<ANS_NUM> &v2,double K){
+short best_c[1 << 26] = {32};
+void load_strategy() {
+  freopen("strategy.txt","r",stdin);
+  int stat, chooce;
+  while(scanf("%d%d", &stat, &chooce)!=EOF){
+    best_c[stat] = chooce;
+  }
+  cout << stat << " " << chooce << endl;
+  fclose(stdin);
+  freopen("CON","r",stdin);
+}
+
+double get_weight(const bitset<ANS_NUM> &v0,const bitset<ANS_NUM> &v1,const bitset<ANS_NUM> &v2,double K = 0.79){
   double res = 0;
   int x0 = bitset_count(v0), x1 = bitset_count(v1), x2 = bitset_count(v2);
   // cout<<x0<<" "<<x1<<" "<<x2<<endl;
